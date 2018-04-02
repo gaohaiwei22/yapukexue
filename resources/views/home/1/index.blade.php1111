@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<title>吖扑科学</title>
+	<link rel="stylesheet" href="{{asset('static/css/index.css')}}">
+	<link href="{{asset('static/img/favicon.ico')}}" rel="shortcut icon" type="image/x-icon">
+	<link rel="stylesheet" href="{{asset('static/css/bootstrap.min.css')}}">
+	<link rel="stylesheet" href="{{asset('static/css/reset.css')}}">
+	<link rel="stylesheet" href="{{asset('static/css/all.css')}}">
+	<script src="{{asset('static/js/jquery-1.11.3.min.js')}}"></script>
+	<script src="{{asset('static/js/index.js')}}"></script>
+	<script src="{{asset('static/js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.js')}}"></script>
+</head>
+<body>
+	<!-- 头部开始 -->
+	<header class="header">
+		<div class="container">
+			<div class="navbar">
+				<div class="navbar-top">
+					<a href="{{url('/')}}">
+						<img src="{{ env('QINIU_DOMAIN')}}/{{$logo->logo}}" alt="">
+					</a>
+					<button type="button" class="navbar-toggle nav-list" data-toggle="collapse" data-target="#example-navbar-collapse">
+	            		<span class="sr-only">切换导航</span>
+	           			<span class="icon-bar"></span>
+	            		<span class="icon-bar"></span>
+	            		<span class="icon-bar"></span>
+	        		</button>
+				</div>
+				<div class="navbar-bottom collapse navbar-collapse" id="example-navbar-collapse">
+					<ul>
+						@foreach($navigation as $v)
+						<li><a href="{{url("$v->url")}}">{{$v->name}}</a></li>
+						@endforeach
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- 头部结束 -->
+	<!-- 视频开始 -->
+	{{--<div class="video">--}}
+		{{--<video src="{{asset('static/img/yapukexue.mp4')}}" poster="{{asset('static/img/1510195714.png')}}" autoplay loop muted></video>--}}
+	{{--</div>--}}
+	<!-- 视频结束 -->
+	<!-- 轮播图开始 -->
+	<div id="did">
+		@foreach($carousel as $v)
+		<img src="{{ env('QINIU_DOMAIN')}}/{{$v->picture}}" alt="First slide" style="width:100%">
+		@endforeach
+	</div>
+	{{--<div id="myCarousel" class="carousel slide carousel-lis">--}}
+		{{--<!-- 轮播（Carousel）指标 -->--}}
+		{{--<div class="carousel-inner">--}}
+			{{--@foreach($carousel as $k => $v)--}}
+
+			{{--<div  class="item active" id = {{$k}}>--}}
+				{{--<img src="{{ env('QINIU_DOMAIN')}}/{{$v->picture}}" alt="First slide">--}}
+			{{--</div>--}}
+			{{--<div class="item">--}}
+				{{--<img src="{{ env('QINIU_DOMAIN')}}/{{$v->picture}}" alt="Second slide">--}}
+			{{--</div>--}}
+			{{--<div class="item">--}}
+				{{--<img src="{{ env('QINIU_DOMAIN')}}/{{$v->picture}}" alt="Third slide">--}}
+			{{--</div>--}}
+				{{--@endforeach--}}
+		{{--</div>--}}
+	{{--</div>--}}
+	<!-- 轮播图结束 -->
+	<!-- 中间内容开始 -->
+	<div class="centent">
+		<!-- 中间选项卡开始 -->
+		<div class="centent-top">
+			<div class="container">
+				<div class="row row-1">
+					<h2 class="centent-top-1">{{$title->title }}</h2>
+					<h5 class="centent-top-2">{{$title->name }}</h5>
+				</div>
+			</div>
+			<!-- 产品教育头部结束 -->
+			<div class="centent-top-3">
+				<nav id="course-recommed list">
+					<ul class="clearfix" style="position:relative;">
+						<li data-id="4" id="0" class="btn active-li actives" style="background:#FFA500;color:#fff">全部</li>
+						@foreach($product as  $j => $v)
+						<li data-id="3" id='{{ $v['id'] }}' class="btn active-li">{{$v['name']}}</li>
+						{{--<li data-id="6" class="btn active-li">培训机构适用</li>--}}
+						{{--<li data-id="5" class="btn active-li">家庭适用</li>--}}
+						{{--<li data-id="2" class="btn active-li">热卖好玩</li>--}}
+						@endforeach
+					</ul>
+				</nav>
+		{{--显示相对应的数据--}}
+			</div>
+			<div class="centent-li">
+				<!-- 全部开始 -->
+				<div class="centent-top-4" id=demo style="display:block" >
+					<div class="container">
+						<div class="row row-1" id="list">
+							@foreach($product_table as $v)
+								<div class="col-xs-6 col-md-3 row-li">
+									<a href="{{URL('/product_table')}}/{{$v['id']}}/details" class="row-list">
+										<img class="list-li" src="{{ env('QINIU_DOMAIN')}}/{{$v['product_picture']}}" alt="">
+										<h4>{{$v['product_name']}}</h4>
+									</a>
+								</div>
+							@endforeach
+						</div>
+					</div>
+				</div>
+				<!-- 全部结束 -->
+		</div>
+			<script>
+                $(function(){
+                    $('.btn').on('click',function(){
+                        var parent = $(this);
+                        console.log(parent);
+                        $.ajax({
+                            type:"get",
+                            url:"{{url('/getcategorydata')}}",
+                            data:"switch=" + parent.attr('id'),
+                            dataType:"json",
+                            success:function(data){
+                                console.log(data);
+                                var html = "<div class=\"centent-top-4\" id=demo style=\"display:block\" >" +
+                                    "<div class=\"container\">" +
+                                    "<div class=\"row row-1\" id=\"list\">";
+                                for (var i=0;i < data.info.length;i++)
+                                {
+                                    html += "<div class=\"col-xs-6 col-md-3 row-li\">" +
+                                        "<a href=\"{{URL('/product_table')}}/"+ data.info[i].id +"/details\" class=\"row-list\">" +
+                                        "<img class=\"list-li\" src=\"" + data.info[i].product_picture + "\" alt=\"\">" +
+                                        "<h4>" + data.info[i].product_name + "</h4>" +
+                                        "</a>" +
+                                        "</div>";
+                                }
+                                html += "</div></div></div>";
+
+                                $(".centent-li").children().remove();
+                                $(".centent-li").append(html);
+                            },
+                            error:function () {
+                                alert("请求失败！");
+                            }
+                        })
+                    })
+                })
+			</script>
+		<!-- 中间选项卡结束 -->
+		<!-- 线上课程开始 -->
+		<div class="centent-bottom">
+			<div class="centent-bottom-1">
+				<!-- 影视专区头部开始 -->
+				<div class="container">
+					<div class="row">
+						<h2 class="centent-top-1">影视专区</h2>
+						<h5 class="centent-top-2">我们希望你知道</h5>
+					</div>
+				</div>
+				<!-- 影视专区头部结束 -->
+				<div class="centent-bottom-2">
+					<div class="container">
+						<div class="row">
+
+								<div class="col-md-6">
+									<div class="bottom-li">
+
+										<div class="bottom-li-1">
+
+											<a href="">
+
+											</a>
+										</div>
+										<div class="bottom-li-2">
+
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 线上课程结束 -->
+	</div>
+	<!-- 中间内容结束 -->
+	<!-- 底部开始 -->
+	<footer>
+		<div class="footer-nav">
+			<nav id="course-recommed">
+			    <ul class="clearfix">
+					@foreach($navigation as $v)
+						<li data-id="4" class="btn btn-1"><a href="{{url("$v->url")}}">{{$v->name}}</a></li>
+					@endforeach
+
+			    </ul>
+    		</nav>
+		</div>
+	</footer>
+	<!-- 底部结束 -->
+	<!-- 回到顶部开始 -->
+	<a href="" class="back" id="backTop">TOP</a>
+	<!-- 回到顶部结束 -->
+</body>
+<!-- 中间选项卡开始 -->
+<script>
+	$(function(){
+		centent1();
+	})
+</script>
+<!-- 中间选项卡结束 -->
+<!-- 字数超出部分隐藏开始 -->
+<script>
+	$(function(){
+		title();
+	})
+</script>
+<!-- 字数超出部分隐藏结束 -->
+<!-- 回到顶部开始 -->
+<script>
+	$(function(){
+		backtop();
+	})	
+</script>
+<!-- 回到顶部结束 -->
+<!-- 头部轮播图开始 -->
+<script>
+    $(function(){
+        $(".carousel-lis").click(function(){
+            $("#myCarousel").carousel('cycle');
+        });
+        // 停止轮播
+        $(".carousel-lis").click(function(){
+            $("#myCarousel").carousel('pause');
+        });
+        $('.carousel-lis').carousel({
+            interval: 2000
+        })
+    })
+</script>
+<script>
+    //获取上面所有的图片
+    var list = document.getElementById("did").getElementsByTagName("img");
+    var m=0;
+    var mytime=null;
+
+    //定时显示图片
+    function running(){
+        show(m);
+        m++;
+        if(m>=list.length){
+            m=0;
+        }
+        mytime = setTimeout("running()",5000);
+    }
+
+    running();
+    //定义函数实现指定图片显示
+    function show(k){
+        for(var i=0;i<list.length;i++){
+            if(i==k){
+                list[i].style.display = "block";
+            }else{
+                list[i].style.display = "none";
+            }
+        }
+    }
+
+    //获取div并绑定鼠标移入和移出事件
+    var did = document.getElementById("did");
+    did.onmouseover = function(){
+        clearTimeout(mytime);
+    };
+    did.onmouseout = function(){
+        running();
+    }
+</script>
+<!-- 头部轮播图结束 -->
+</html>
